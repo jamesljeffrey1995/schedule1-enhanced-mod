@@ -1,0 +1,74 @@
+# Visual Studio / Rider
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+bin/
+obj/
+*.swp
+*~
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]uild/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+
+# Game assemblies (don't commit copyrighted game files)
+lib/*.dll
+!lib/README.md
+
+# Unity
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+AssetBundles/
+*.pidb
+*.unityproj
+*.sln
+*.userprefs
+*.DS_Store
+*.csproj
+*.unitypackage
+*.apk
+
+# Rider
+.idea/
+*.sln.iml
+
+# VS Code
+.vscode/
+
+# OSX
+.DS_Store
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Mod build artifacts
+*.zip
+releases/
+
+# Configuration (keep templates only)
+config/*.cfg
+!config/*.cfg.template
+
+# Logs
+*.log
+logs/
