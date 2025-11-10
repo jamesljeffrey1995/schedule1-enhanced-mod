@@ -1,0 +1,101 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '6.0.x'
+    
+    - name: Display structure
+      run: |
+        Write-Host "Repository structure:"
+        Get-ChildItem -Recurse -Depth 2
+    
+    - name: Check for required libraries
+      run: |
+        if (!(Test-Path "lib/MelonLoader.dll")) {
+          Write-Host "⚠️ Warning: MelonLoader.dll not found in lib/"
+          Write-Host "The build will fail. Please add required DLLs to lib/ folder."
+          Write-Host "See lib/README.md for instructions."
+        }
+        if (!(Test-Path "lib/S1API.dll")) {
+          Write-Host "⚠️ Warning: S1API.dll not found in lib/"
+        }
+        if (!(Test-Path "lib/UnityEngine.dll")) {
+          Write-Host "⚠️ Warning: UnityEngine.dll not found in lib/"
+        }
+    
+    - name: Restore dependencies
+      run: dotnet restore Schedule1EnhancedMod.sln
+      continue-on-error: true
+    
+    - name: Build
+      run: dotnet build Schedule1EnhancedMod.sln --configuration Release --no-restore
+      continue-on-error: true
+    
+    - name: Upload build artifacts
+      if: success()
+      uses: actions/upload-artifact@v4
+      with:
+        name: Schedule1EnhancedMod-${{ github.sha }}
+        path: |
+          bin/Release/*.dll
+          bin/Release/*.pdb
+        retention-days: 30
+    
+    - name: Create Release Package
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: |
+        $version = "${{ github.ref_name }}"
+        $outputDir = "release-package"
+        New-Item -ItemType Directory -Force -Path $outputDir
+        
+        # Copy the mod DLL
+        Copy-Item "bin/Release/Schedule1EnhancedMod.dll" "$outputDir/"
+        
+        # Copy documentation
+        Copy-Item "README.md" "$outputDir/"
+        Copy-Item "LICENSE" "$outputDir/"
+        
+        # Create a zip file
+        Compress-Archive -Path "$outputDir/*" -DestinationPath "Schedule1EnhancedMod-$version.zip"
+    
+    - name: Create GitHub Release
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          Schedule1EnhancedMod-*.zip
+        body: |
+          ## Schedule 1 Enhanced Mod ${{ github.ref_name }}
+          
+          ### Installation
+          1. Download `Schedule1EnhancedMod-${{ github.ref_name }}.zip`
+          2. Extract the contents
+          3. Copy `Schedule1EnhancedMod.dll` to your `Schedule 1/Mods/` folder
+          4. Launch the game
+          
+          ### Requirements
+          - MelonLoader installed
+          - S1API installed
+          
+          ### Changes
+          See commit history for detailed changes.
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

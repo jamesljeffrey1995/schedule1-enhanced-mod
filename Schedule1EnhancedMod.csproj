@@ -1,0 +1,70 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>Schedule1EnhancedMod</AssemblyName>
+    <RootNamespace>Schedule1EnhancedMod</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>embedded</DebugType>
+    <Nullable>enable</Nullable>
+    
+    <!-- Output Configuration -->
+    <OutputPath>bin/$(Configuration)/</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Product>Schedule 1 Enhanced Mod</Product>
+    <Description>Enhanced gameplay modifications and new content for Schedule 1</Description>
+    <Authors>James Jeffrey</Authors>
+    <Version>1.0.0</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/jamesljeffrey1995/schedule1-enhanced-mod</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- MelonLoader Reference -->
+    <!-- Place MelonLoader.dll in lib/ folder after downloading from MelonLoader releases -->
+    <Reference Include="MelonLoader">
+      <HintPath>lib/MelonLoader.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <!-- S1API Reference -->
+    <!-- Place S1API.dll in lib/ folder after downloading from Thunderstore -->
+    <Reference Include="S1API">
+      <HintPath>lib/S1API.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <!-- UnityEngine References -->
+    <!-- These are typically in your Schedule 1/Schedule I_Data/Managed/ folder -->
+    <Reference Include="UnityEngine">
+      <HintPath>lib/UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>lib/UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>lib/Il2Cppmscorlib.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- Configuration-specific settings -->
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+</Project>
